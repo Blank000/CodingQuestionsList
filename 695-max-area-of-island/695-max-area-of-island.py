@@ -1,29 +1,28 @@
 class Solution:
     def maxAreaOfIsland(self, grid: List[List[int]]) -> int:
-        
-        x = [1, -1, 0, 0]
-        y = [0, 0, 1, -1]
-        
-        def isValid(i,j):
-            if i <0 or j <0 or i>= len(grid) or j >= len(grid[0]):
-                return False
-            return True
-        def dfs(grid, i, j):
-            if not isValid(i,j) or grid[i][j] == 0:
-                return 0
-            v = 1
-            grid[i][j] = 0
-            for d in range(4):
-                v += dfs(grid, i+x[d], j+y[d])
-            return v
-                    
-        maxmArea = 0
+        ans = 0
+        dic = {}
         for i in range(len(grid)):
             for j in range(len(grid[0])):
-                if grid[i][j] == 1:
-                    maxmArea = max(maxmArea, dfs(grid, i, j))
-                    #print(maxmArea , i, j)
-        return maxmArea
-        
-                    
-            
+                if grid[i][j] == 1 and (i, j) not in dic:
+                    area = 0
+                    st = [(i, j)]
+                    dic[(i, j)] = 1
+                    while st:
+                        x, y = st.pop()
+                        area += 1
+                        if (0 <= (x-1) < len(grid)) and grid[x-1][y] != 0 and (x-1, y) not in dic: 
+                            st.append((x-1, y))
+                            dic[(x-1, y)] = 1
+                        if (0 <= (x+1) < len(grid)) and grid[x+1][y] != 0 and (x+1, y) not in dic: 
+                            st.append((x+1, y))
+                            dic[(x+1, y)] = 1
+                        if (0 <= (y-1) < len(grid[0])) and grid[x][y-1] != 0 and (x, y-1) not in dic: 
+                            st.append((x, y-1))
+                            dic[(x, y-1)] = 1
+                        if (0 <= (y+1) < len(grid[0])) and grid[x][y+1] != 0 and (x, y+1) not in dic: 
+                            st.append((x, y+1))
+                            dic[(x, y+1)] = 1
+
+                    ans = max(ans, area)
+        return ans
