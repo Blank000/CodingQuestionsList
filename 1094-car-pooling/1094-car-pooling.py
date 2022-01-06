@@ -1,16 +1,14 @@
-import heapq
 class Solution:
     def carPooling(self, trips: List[List[int]], capacity: int) -> bool:
-        # Here are this thing needs to be checked, that 
-        # number of passangers at anypoint of time must not exceed the capacity
-        l = []
-        for i in range(len(trips)):
-            l.append([trips[i][1], trips[i][0]])
-            l.append([trips[i][2], -trips[i][0]])
-        l.sort()
-        curr = 0
-        for t, c in l:
-            curr += c
-            if curr > capacity:
+        timestamp = [0] * 1001
+        for trip in trips:
+            timestamp[trip[1]] += trip[0]
+            timestamp[trip[2]] -= trip[0]
+
+        used_capacity = 0
+        for passenger_change in timestamp:
+            used_capacity += passenger_change
+            if used_capacity > capacity:
                 return False
+
         return True
