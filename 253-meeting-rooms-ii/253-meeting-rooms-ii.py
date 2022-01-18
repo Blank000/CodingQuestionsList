@@ -8,13 +8,13 @@ class Solution:
         heapq.heapify(endList)
         for start, end in intervals:
             count = 0
+            currOverlappingIntervals += 1
             if not endList:
                 currOverlappingIntervals = 1
             elif endList[0] <= start:
-                #currOverlappingIntervals -= 1
+                currOverlappingIntervals -= 1
                 heapq.heappop(endList)
-            else:
-                currOverlappingIntervals += 1
+            
             heapq.heappush(endList, end)
             numOfConfRoomReqd = max(numOfConfRoomReqd, currOverlappingIntervals)
         return numOfConfRoomReqd
