@@ -12,7 +12,7 @@ class Solution:
         #print(dp)
         for k in range(len(grid)-1, -1, -1):
             for i in range(len(grid[0])):
-                for j in range(len(grid[0])):
+                for j in range(i, len(grid[0])):
                     if k == len(grid) - 1:
                         dp[k][i][j] = grid[k][i] if i == j else (grid[k][i] + grid[k][j])
                     else:
