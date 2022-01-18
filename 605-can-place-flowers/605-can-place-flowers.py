@@ -24,6 +24,7 @@ class Solution:
             if canBePlaced(flowerbed, i):
                 flowerbed[i] = 1
                 n -= 1
+                i += 1
             if n == 0:
                 return True
         if n <= 0:
