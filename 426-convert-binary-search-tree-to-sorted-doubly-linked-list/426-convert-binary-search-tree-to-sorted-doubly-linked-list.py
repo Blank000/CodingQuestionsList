@@ -19,10 +19,11 @@ class Solution:
                 headRight, tail = traverse(node.right)
                 headRight.left = node
                 node.right = headRight
+            head.left = tail
+            tail.right = head
             return head, tail
         if root is None:
             return
         head, tail = traverse(root)
-        tail.right = head
-        head.left = tail
+        
         return head
