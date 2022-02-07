@@ -4,11 +4,9 @@ class Solution:
         for i in range(len(s)):
             dic[s[i]] += 1
         for i in range(len(t)):
-            if t[i] not in dic:
+            if t[i] not in dic or dic[t[i]] == 0:
                 return t[i]
             dic[t[i]] -= 1
-            if dic[t[i]] == 0:
-                del dic[t[i]]
         for k in dic.keys():
             return k
             
