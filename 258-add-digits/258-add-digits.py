@@ -1,11 +1,5 @@
 class Solution:
-    def addDigits(self, num: int) -> int:
-        def digitSum(num):
-            res = 0
-            while num:
-                res += num%10
-                num //= 10
-            return res
-        while num >= 10:
-            num = digitSum(num)
-        return num
+    def addDigits(self, n: int) -> int:
+        if n == 0:
+            return 0
+        return 9 if n%9 == 0 else n%9
