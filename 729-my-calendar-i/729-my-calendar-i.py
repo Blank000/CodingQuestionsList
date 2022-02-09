@@ -1,22 +1,35 @@
 import bisect
+class Node:
+    def __init__(self, start, end):
+        self.start = start
+        self.end = end
+        self.left = self.right = None
+    
+    def insertNode(self, node):
+        if node.start >= self.end:
+            if not self.right:
+                self.right =  node
+                return True
+            return self.right.insertNode(node)
+        elif node.end <= self.start:
+            if not self.left:
+                self.left = node
+                return True
+            return self.left.insertNode(node)
+        else:
+            return False
+                
+        
 class MyCalendar:
 
     def __init__(self):
-        self.arr = []
+        self.root = None
 
     def book(self, start: int, end: int) -> bool:
-        if len(self.arr) == 0:
-            self.arr.append(start)
-            self.arr.append(end)
+        if self.root is None:
+            self.root = Node(start, end)
             return True
-        else:
-            startIdx = bisect.bisect_right(self.arr, start)
-            endIdx = bisect.bisect_left(self.arr, end)
-            #print(startIdx, endIdx)
-            if startIdx & 1 == 0 and endIdx & 1 == 0 and startIdx == endIdx:
-                self.arr[startIdx:endIdx] = [start, end]
-                return True
-            return False
+        return self.root.insertNode(Node(start , end))
         
 
 
