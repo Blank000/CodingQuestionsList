@@ -13,7 +13,7 @@ class Solution:
                 return True
             if idx < k:
                 return quickSelect(distn, idx+1, end)
-            return quickSelect(distn, start, idx-1)
+            return quickSelect(distn, start, idx-1) 
         
             
         def shiftAllSmallerToPivotOnLeft(distn, start, end):
