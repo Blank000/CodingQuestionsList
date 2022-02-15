@@ -4,30 +4,28 @@ class Solution:
     def kClosest(self, points: List[List[int]], k: int) -> List[List[int]]:
         if len(points) == k:
             return points
-        distance = []
-        maxmDist = 0
-        for a, b in points:
-            distance.append([a**2+b**2, a, b])
-            maxmDist = max(maxmDist, distance[-1][0])
-        low, high = 0, maxmDist
-        res = []
-        while k:
-            mid = low + (high - low)//2
-            closestTemp, farthestTemp = [], []
-            for i in range(len(distance)):
-                d, a, b, = distance[i]
-                if d <= mid:
-                    closestTemp.append([d, a, b])
-                else:
-                    farthestTemp.append([d, a, b])
+        distn = list(map(lambda x: [x[1][0]**2+x[1][1]**2, x[0]], enumerate(points)))
+        def quickSelect(distn, start, end):
+            if start >= end:
+                return False
+            idx = shiftAllSmallerToPivotOnLeft(distn, start, end)
+            if idx == k-1:
+                return True
+            return quickSelect(distn, start, idx-1) or quickSelect(distn, idx+1, end)
+        
             
-            if len(closestTemp) > k:
-                distance = closestTemp
-                high = mid
-            else:
-                k -= len(closestTemp)
-                res.extend(closestTemp)
-                distance = farthestTemp
-                low = mid
+        def shiftAllSmallerToPivotOnLeft(distn, start, end):
+            pivotDistn, idx = distn[end]
+            i = start
+            for j in range(start, end):
+                d, idx = distn[j]
+                if d <= pivotDistn:
+                    distn[j], distn[i] = distn[i], distn[j]
+                    i += 1
+            distn[i], distn[end] = distn[end], distn[i]
+            return i
+        quickSelect(distn, 0, len(distn)-1)
+        #print(distn)
+        return [points[distn[i][1]] for i in range(k)]
             
-        return [[a,b] for _, a, b in res]
+        
