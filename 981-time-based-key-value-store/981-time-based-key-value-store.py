@@ -1,23 +1,27 @@
 from sortedcontainers import SortedList
+import bisect
 class TimeMap:
 
     def __init__(self):
-        self.l = SortedList()
+        self.keyTime = collections.defaultdict(list)
         
 
     def set(self, key: str, value: str, timestamp: int) -> None:
-        self.l.add((key, timestamp, value))
-
+        self.keyTime[key].append([timestamp, value])
+            
     def get(self, key: str, timestamp: int) -> str:
-        if len(self.l) == 0:
+        arr = self.keyTime[key]
+        low, high = 0, len(arr)
+        if high == 0:
             return ""
-        idx = self.l.bisect_left((key, timestamp, "zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz"))
-        if idx < len(self.l) and self.l[idx] == timestamp:
-            return self.l[idx][2]
-        if idx == 0 or self.l[idx-1][0] != key:
-            return ""
-        return self.l[idx-1][2]
-
+        while low < high:
+            mid = (low+high)//2
+            if arr[mid][0] <= timestamp:
+                low = mid+1
+            else:
+                high = mid
+        return "" if high == 0 else arr[high-1][1]
+        
 
 # Your TimeMap object will be instantiated and called as such:
 # obj = TimeMap()
