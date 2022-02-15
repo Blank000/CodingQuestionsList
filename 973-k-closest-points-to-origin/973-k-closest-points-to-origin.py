@@ -11,7 +11,9 @@ class Solution:
             idx = shiftAllSmallerToPivotOnLeft(distn, start, end)
             if idx == k-1:
                 return True
-            return quickSelect(distn, start, idx-1) or quickSelect(distn, idx+1, end)
+            if idx < k:
+                return quickSelect(distn, idx+1, end)
+            return quickSelect(distn, start, idx-1)
         
             
         def shiftAllSmallerToPivotOnLeft(distn, start, end):
