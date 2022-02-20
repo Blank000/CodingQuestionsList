@@ -2,7 +2,8 @@ class SparseVector:
     def __init__(self, nums: List[int]):
         self.dic = {}
         for i in range(len(nums)):
-            self.dic[i] = nums[i]
+            if nums[i] != 0:
+                self.dic[i] = nums[i]
 
     # Return the dotProduct of two sparse vectors
     def dotProduct(self, vec: 'SparseVector') -> int:
