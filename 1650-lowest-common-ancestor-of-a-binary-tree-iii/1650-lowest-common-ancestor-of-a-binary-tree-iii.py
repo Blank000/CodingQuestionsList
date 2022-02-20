@@ -10,23 +10,24 @@ class Node:
 
 class Solution:
     def lowestCommonAncestor(self, p: 'Node', q: 'Node') -> 'Node':
-        dicP = {}
-        dicQ = {}
+        visitedP = set()
+        visitedQ = set()
         while p and q:
-            dicP[p.val] = p
-            dicQ[q.val] = q
-            if p.val in dicQ:
-                return dicQ[p.val]
-            if q.val in dicP:
-                return dicP[q.val]
+            if p.val == q.val or p.val in visitedQ:
+                return p
+            if q.val in visitedP:
+                return q
+            visitedP.add(p.val)
+            visitedQ.add(q.val)
             p = p.parent
             q = q.parent
-        while p:
-            if p.val in dicQ:
-                return dicQ[p.val]
-            p = p.parent
-        while q:
-            if q.val in dicP:
-                return dicP[q.val]
-            q = q.parent
-        return
+        if p is None:
+            while q:
+                if q.val in visitedP:
+                    return q
+                q = q.parent
+        if q is None:
+            while p:
+                if p.val in visitedQ:
+                    return p
+                p = p.parent
