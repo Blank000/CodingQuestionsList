@@ -1,15 +1,16 @@
 class Solution:
 	def coinChange(self, coins: List[int], amount: int) -> int:
-		prev = [math.inf]*(amount+1)
-		prev[0] = 0
-		for i in range(len(coins)):
-			curr = [math.inf]*(amount+1)
-			curr[0] = 0
-			for j in range(1,amount+1):
-				if j < coins[i]:
-					curr[j] = prev[j]
-				else:
-					curr[j] = min(prev[j], 1+curr[j-coins[i]])
-			prev = curr
-		return prev[-1] if prev[-1] != math.inf else -1
-		
+		dp = [[math.inf]*(amount+1) for _ in range(len(coins)+1)]
+		for i in range(len(dp)):
+			dp[i][0] = 0
+		for i in range(1, len(dp)):
+			for j in range(1, len(dp[0])):
+				dp[i][j] = dp[i-1][j] 
+				if j >= coins[i-1]:
+					dp[i][j] = min(dp[i][j], dp[i][j-coins[i-1]] + 1)
+		if dp[-1][-1] == math.inf:
+			return -1
+		return dp[-1][-1]
+        
+
+
