@@ -1,6 +1,6 @@
 class Solution:
 	def minimumJumps(self, forbidden: List[int], a: int, b: int, x: int) -> int:
-		maxVal = 6000
+		maxVal = max([x]+forbidden)+a+b + 1
 		numOfSteps = [math.inf]*maxVal
 		numOfSteps[0] = 0
 		for i in forbidden:
