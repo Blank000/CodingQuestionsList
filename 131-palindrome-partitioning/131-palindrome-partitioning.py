@@ -1,25 +1,26 @@
 class Solution:
-    def partition(self, s: str) -> List[List[str]]:
-        # This question can be solved using gap interval technique or even the breakpoint technique
-        breakpoints = collections.defaultdict(list)
-        for i in range(len(s)):
-            breakpoints[i] = []
-        def getListOfPallindromes(breakpoints, s):
-            for i in range(len(s)):
-                for b,v in breakpoints.items():
-                    if b > i:
-                        break
-                    if s[b:i+1] == s[b:i+1][::-1]:
-                        breakpoints[b].append(s[b:i+1])
-        getListOfPallindromes(breakpoints, s)
-        res = []
-        def addPallindromeSubsets(res, breakpoints, idx, s, tempArr):
-            if idx == len(s):
-                res.append(tempArr[::])
-                return
-            for word in breakpoints[idx]:
-                tempArr.append(word)
-                addPallindromeSubsets(res, breakpoints, idx+len(word), s, tempArr)
-                tempArr.pop()
-        addPallindromeSubsets(res, breakpoints, 0, s, [])
-        return res
+	def partition(self, s: str) -> List[List[str]]:
+		dp = [[False]*(len(s)) for _ in range(len(s))]
+		for i in range(len(s)):
+			dp[i][i] = True
+		for l in range(1, len(s)):
+			for i in range(len(s)-l):
+				if s[i:i+l+1] == s[i:i+l+1][::-1]:
+					dp[i][i+l]  = True
+		res = []
+		def createArr(dp, row, col, temp):
+			temp.append(s[row:col+1])
+			if col == len(dp[0])-1:
+				res.append(temp)
+				return
+			row = col+1
+			for i in range(row, len(dp[0])):
+				if s[row:i+1] == s[row:i+1][::-1]:
+					createArr(dp, row, i, temp[:])
+		for i in range(len(dp[0])):
+			if s[:i+1] == s[:i+1][::-1]:
+				createArr(dp, 0, i,[])
+		return res
+        
+
+
