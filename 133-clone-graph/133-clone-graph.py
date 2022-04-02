@@ -8,15 +8,15 @@ class Node:
 
 class Solution:
     def cloneGraph(self, node: 'Node') -> 'Node':
-        dic = {}
-        def deepCopy(node, dic):
+        visited = {}
+        def deepcopy(node, visited):
             if node is None:
-                return 
-            if node.val in dic:
-                return dic[node.val]
-            rootCopy = Node(node.val)
-            dic[node.val] = rootCopy
+                return None
+            if node.val in visited:
+                return visited[node.val] 
+            duplicate_node = Node(node.val)
+            visited[node.val] = duplicate_node
             for neighbor in node.neighbors:
-                rootCopy.neighbors.append(deepCopy(neighbor, dic))
-            return rootCopy
-        return deepCopy(node, dic)
+                duplicate_node.neighbors.append(deepcopy(neighbor, visited))
+            return duplicate_node
+        return deepcopy(node, visited)
