@@ -1,29 +1,30 @@
 class Solution:
     
-    def do_kahn_algo(self, queue, adjList, incoming_degree, numCourses):
-        n = 0
-        while queue:
-            node = queue.pop()
-            n += 1
-            for neighbour in adjList[node]:
-                incoming_degree[neighbour] -= 1
-                if incoming_degree[neighbour] == 0:
-                    queue.append(neighbour)
-        return n == numCourses
-                
-        
+    def do_dfs(self, vertex, adjList, visited, is_present_in_recursion_stack):
+        visited[vertex] = True
+        is_present_in_recursion_stack[vertex] = True
+        for neighbour in adjList[vertex]:
+            if not visited[neighbour]:
+                if not self.do_dfs(neighbour, adjList, visited, is_present_in_recursion_stack):
+                    return False
+            elif is_present_in_recursion_stack[neighbour]:
+                return False
+        is_present_in_recursion_stack[vertex] = False
+        return True
         
             
         
     def canFinish(self, numCourses: int, prerequisites: List[List[int]]) -> bool:
         adjList = collections.defaultdict(list)
-        incoming_degree = collections.defaultdict(int)
         visited = collections.defaultdict(bool)
+        is_present_in_recursion_stack = collections.defaultdict(bool)
         for b, a in prerequisites:
             adjList[a].append(b)
-            incoming_degree[b] += 1
-        queue = []
+        # Will be doing dfs to find a back edge, as we don't know , there can be a graph forest, so I will be maintaing both visited and is_present_in_stack
         for i in range(numCourses):
-            if incoming_degree[i] == 0:
-                queue.append(i)
-        return self.do_kahn_algo(queue, adjList, incoming_degree, numCourses)
+            if not visited[i]:
+                if not self.do_dfs(i, adjList, visited, is_present_in_recursion_stack):
+                    return False
+        return True
+    
+        
