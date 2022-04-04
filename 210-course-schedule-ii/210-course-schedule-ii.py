@@ -1,29 +1,30 @@
 from collections import defaultdict
 class Solution:
-    def do_dfs(self, vertex, adjList, visited, is_present_in_recursion_stack, order):
+    
+    def do_dfs(self, vertex, adjList, visited, is_stack, topological_order):
         visited[vertex] = True
-        is_present_in_recursion_stack[vertex] = True
-        for neighbour in adjList[vertex]:
-            if not visited[neighbour]:
-                if not self.do_dfs(neighbour, adjList, visited, is_present_in_recursion_stack, order):
+        is_stack[vertex] = True
+        for neighbor in adjList[vertex]:
+            if not visited[neighbor]:
+                if not self.do_dfs(neighbor, adjList, visited, is_stack, topological_order):
                     return False
-            elif is_present_in_recursion_stack[neighbour]:
+            elif is_stack[neighbor]:
                 return False
-        is_present_in_recursion_stack[vertex] = False
-        order.append(vertex)
+        topological_order.append(vertex)
+        is_stack[vertex] = False
         return True
         
     def findOrder(self, numCourses: int, prerequisites: List[List[int]]) -> List[int]:
         adjList = defaultdict(list)
-        visited = defaultdict(bool)
-        is_present_in_recursion_stack = defaultdict(bool)
         for b,a in prerequisites:
             adjList[a].append(b)
-        order = []
-        for i in range(numCourses):
-            if not visited[i]:
-                if not self.do_dfs(i, adjList, visited, is_present_in_recursion_stack, order):
+        visited = defaultdict(bool)
+        is_stack = defaultdict(bool)
+        topological_order = []
+        for vertex in range(numCourses):
+            if not visited[vertex]:
+                if not self.do_dfs(vertex, adjList, visited, is_stack, topological_order):
                     return []
-        return order[::-1]
+        return topological_order[::-1]
         
-            
+        
