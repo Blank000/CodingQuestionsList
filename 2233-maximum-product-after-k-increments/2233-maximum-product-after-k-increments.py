@@ -1,27 +1,14 @@
 
-import heapq
+MOD = 10 ** 9 + 7
 
 class Solution:
-    def maximumProduct(self, nums, k: int) -> int:
-        
-        # creating a heap
-        heap = []
-        for i in nums:
-            heapq.heappush (heap,i)
-            
-            
-        # basic idea here is keep on incrementing smallest number, then only multiplication of that number will be greater
-        # so basically till I have operations left I will increment my smallest number
-        while k :
-            current = heapq.heappop(heap)
-            heapq.heappush(heap, current+1)
-            k-=1
-            
-        result =1
-        
-        # Just Multiply all the numbers in heap and return the value
-        while len(heap)>0:
-            x= heapq.heappop(heap)
-            result =(result*x )% (10**9+7)
-            
-        return result
+    def maximumProduct(self, nums: list[int], k: int) -> int:
+        nums.sort()
+        def get_index():
+            for i, n in enumerate(accumulate(nums)):
+                if (i + 1) * nums[i] - n >= k:
+                    return i
+            return len(nums)
+        idx = get_index() - 1
+        q, r = divmod(k + sum(nums[:idx + 1]), idx + 1)
+        return (pow(q + 1, r, MOD) * pow(q, idx + 1 - r, MOD) * prod(nums[idx + 1:])) % MOD
