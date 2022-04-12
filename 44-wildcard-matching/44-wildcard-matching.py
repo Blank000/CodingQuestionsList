@@ -14,9 +14,8 @@ class Solution:
 					if j == 1:
 						dp[i][j] = True
 					else:
-						dp[i][j] = dp[i-1][j-1] or dp[i][j-1]
-						if i > 1:
-							dp[i][j] = dp[i][j] or dp[i-1][j]
+						dp[i][j] = dp[i-1][j-1] or dp[i][j-1] or dp[i-1][j]
+						
 		return dp[-1][-1]
         
 
